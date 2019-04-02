@@ -1,6 +1,6 @@
 # Connect to the J-Link gdb server
 define jlink_connect
-  target remote localhost:2331
+  target remote localhost:3333
 end
 
 define reset_peripherals
