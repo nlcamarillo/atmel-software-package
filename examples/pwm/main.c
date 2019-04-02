@@ -191,6 +191,10 @@
 /** Pio pins to configure. */
 static const struct _pin pins_pwm[] = { PIN_PWM };
 
+// RK: PIN_PWM currently refers to { PIO_GROUP_B, PIO_PB5C_PWM0_H2, PIO_PERIPH_C, PIO_PULLUP }
+// RK: this can probably be replaced with something like { PIO_GROUP_B, PIO_PB1D_PWM0_L1, PIO_PERIPH_D, PIO_PULLUP }
+// RK: that would address the red led in oko
+
 /** PWM channel to use */
 static const uint8_t pwm_channel = CHANNEL_PWM;
 
