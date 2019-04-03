@@ -19,3 +19,4 @@ tests/*/settings/
 examples/*/Debug/
 tests/*/Debug/
 *~
+.vscode/
