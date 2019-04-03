@@ -5,6 +5,8 @@ define reset
 
   # Connect to the J-Link gdb server
   jlink_connect
+
+  mon halt
   
   reset_peripherals
 
