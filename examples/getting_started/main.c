@@ -98,16 +98,10 @@
  *        Headers
  *----------------------------------------------------------------------------*/
 
-#include "board.h"			//todo: check what it initializes
-#include "chip.h"
 #include "trace.h"
-#include "compiler.h"
 #include "timer.h"
 
-#include "irq/irq.h"
 #include "gpio/pio.h"
-#include "peripherals/pmc.h"
-#include "peripherals/tcd.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -118,11 +112,6 @@
 
 /** Delay for pushbutton debouncing (in milliseconds). */
 #define DEBOUNCE_TIME       500
-
-struct _tcd_desc tc = {
-	.addr = TC0,
-	.channel = 0,
-};
 
 // #define ISOKO
 
@@ -222,11 +211,17 @@ static void configure_buttons(void)
 	pio_configure(&sw_1, 1);
 
 	/* Initialize interrupt with its handlers */
-	pio_add_handler_to_group(sw_1.group,
-					sw_1.mask, pio_handler, NULL);
+	pio_add_handler_to_group(sw_1.group, sw_1.mask, pio_handler, NULL);
 
 	/* Enable interrupts */
 	pio_enable_it(&sw_1);
+}
+
+/**
+ * configure leds according to pin definitions
+ */
+static void configure_leds(void) {
+	pio_configure(&atmel_red, 1);
 }
 
 /*----------------------------------------------------------------------------
@@ -244,6 +239,7 @@ int main(void)
 
 	printf("Configure buttons with debouncing.\n\r");
 	configure_buttons();
+	configure_leds();
 	printf("Use push buttons\n\r");
 
 	printf("LED 0 uses softpack timer functions\r\n");
