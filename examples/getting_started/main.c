@@ -116,9 +116,13 @@
 // #define ISOKO
 
 #ifdef ISOKO
-	//todo: for oko, sw_1 is on PIOBU01, sw_2 is on PIOBU00
+	/**
+	 * todo: for oko, sw_1 is on PIOBU01, sw_2 is on PIOBU00
+	 * not sure how to do that, but there is piobu.h which at least allows to
+	 * configure the pins
+	 */
 	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
-	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_1, PIO_OPENDRAIN }
+	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_0, PIO_OPENDRAIN }
 #else
 	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
 	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB6, PIO_OUTPUT_1, PIO_OPENDRAIN }
