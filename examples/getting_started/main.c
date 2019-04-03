@@ -161,22 +161,11 @@ volatile bool led_status[NUM_LEDS];
  *
  *  Change active states of LEDs when corresponding button events happened.
  */
-static void process_button_evt(uint8_t bt)
+static void process_button_evt(void)
 {
-	if (bt >= NUM_LEDS) {
-		return;
-	}
-	led_status[bt] = !led_status[bt];
-	if (bt == 0) {
-		if (!led_status[bt]) {
-			led_clear(bt);
-		}
-	} else if (bt < NUM_LEDS) {
-		if (led_status[bt]) {
-			led_set(bt);
-		} else {
-			led_clear(bt);
-		}
+	led_status[0] = !led_status[0];
+	if (!led_status[0]) {
+		led_clear(0);
 	}
 }
 
@@ -187,17 +176,9 @@ static void process_button_evt(uint8_t bt)
  */
 static void pio_handler(uint32_t group, uint32_t status, void* user_arg)
 {
-	int i;
-
 	/* unused */
 	(void)user_arg;
-
-	for (i = 0; i < ARRAY_SIZE(button_pins); ++i) {
-		if (group != button_pins[i].group)
-			continue;
-		if (status & button_pins[i].mask)
-			process_button_evt(i);
-	}
+	process_button_evt();
 }
 
 /**
@@ -211,19 +192,15 @@ static void configure_buttons(void)
 	/* Adjust debounce filter parameters, use 10 Hz filter */
 	pio_set_debounce_filter(10);
 
-	int i = 0;
-	for (i = 0; i < ARRAY_SIZE(button_pins); ++i)
-	{
-		/* Configure PIO */
-		pio_configure(&button_pins[i], 1);
+	/* Configure PIO */
+	pio_configure(&button_pins[0], 1);
 
-		/* Initialize interrupt with its handlers */
-		pio_add_handler_to_group(button_pins[i].group,
-				      button_pins[i].mask, pio_handler, NULL);
+	/* Initialize interrupt with its handlers */
+	pio_add_handler_to_group(button_pins[0].group,
+					button_pins[0].mask, pio_handler, NULL);
 
-		/* Enable interrupts */
-		pio_enable_it(button_pins);
-	}
+	/* Enable interrupts */
+	pio_enable_it(button_pins);
 }
 
 /*----------------------------------------------------------------------------
