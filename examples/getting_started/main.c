@@ -127,15 +127,28 @@ struct _tcd_desc tc = {
 	.channel = 0,
 };
 
+// #define ISOKO
+
+#ifdef ISOKO
+	//todo: for oko, sw_1 is on PIOBU01, sw_2 is on PIOBU00
+	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
+	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_1, PIO_OPENDRAIN }
+#else
+	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
+	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB6, PIO_OUTPUT_1, PIO_OPENDRAIN }
+#endif
+
+//copied from board def
+#define PINS_PUSHBUTTONS { PIN_SW_1 }
+#define NUM_LEDS 1
+
 /*----------------------------------------------------------------------------
  *        Local variables
  *----------------------------------------------------------------------------*/
 
 
-#ifdef PINS_PUSHBUTTONS
 /** Pushbutton \#1 pin instance. */
 static const struct _pin button_pins[] = PINS_PUSHBUTTONS;
-#endif
 
 volatile bool led_status[NUM_LEDS];
 
@@ -166,8 +179,6 @@ static void process_button_evt(uint8_t bt)
 		}
 	}
 }
-
-#ifdef PINS_PUSHBUTTONS
 
 /**
  *  \brief Handler for Buttons rising edge interrupt.
@@ -215,8 +226,6 @@ static void configure_buttons(void)
 	}
 }
 
-#endif /* PINS_PUSHBUTTONS */
-
 /*----------------------------------------------------------------------------
  *        Global functions
  *----------------------------------------------------------------------------*/
@@ -231,35 +240,17 @@ int main(void)
 	int i = 0;
 
 	led_status[0] = true;
-	for (i = 1; i < NUM_LEDS; ++i) {
-		led_status[i] = led_status[i-1];
-	}
 
 	printf("Initializing console interrupts\r\n");
 
-#ifdef PINS_PUSHBUTTONS
 	printf("Configure buttons with debouncing.\n\r");
 	configure_buttons();
 	printf("Use push buttons or console key 0 to %d.\n\r", NUM_LEDS - 1);
-#else
-	printf("Use console key 0 to %d.\n\r", NUM_LEDS - 1);
-#endif /* PINS_PUSHBUTTONS */
 
 	printf("Press the number of the led to make it "
 	       "start or stop blinking.\n\r");
 
 	printf("LED 0 uses softpack timer functions\r\n");
-
-#if NUM_LEDS > 1
-	/* Configure TC */
-#if NUM_LEDS == 2
-	printf("LED 1 uses a TC\r\n");
-#else
-	printf("LEDs 1-%d use a TC\r\n", NUM_LEDS - 1);
-#endif
-	printf("Press 's' to stop the TC and 'b' to start it\r\n");
-	tcd_configure_counter(&tc, 0, 4); /* 4Hz */
-#endif
 
 	while (1) {
 
