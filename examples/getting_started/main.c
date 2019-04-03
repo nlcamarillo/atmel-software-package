@@ -109,7 +109,6 @@
 #include "peripherals/pmc.h"
 #include "peripherals/tcd.h"
 
-#include "serial/console.h"
 #include "led/led.h"
 
 
@@ -218,49 +217,6 @@ static void configure_buttons(void)
 
 #endif /* PINS_PUSHBUTTONS */
 
-#if NUM_LEDS > 1
-/**
- *  Interrupt handler for TC interrupt. Toggles the state of all LEDs except 0
- */
-static int _tc_handler(void* arg, void* arg2)
-{
-	int i;
-
-	/** Toggle LEDs state. */
-	for (i = 1; i < NUM_LEDS; ++i) {
-		if (led_status[i]) {
-			led_toggle(i);
-			printf("%i ", (unsigned int)i);
-		}
-	}
-
-	return 0;
-}
-
-#endif /* NUM_LEDS > 1 */
-
-/**
- *  \brief Handler for DBGU input.
- *
- *  Handle process LED1 or LED2 status change.
- */
-static void console_handler(uint8_t key)
-{
-	if (key >= '0' && key <= '9') {
-		process_button_evt(key - '0');
-	}
-#if NUM_LEDS > 1
-	else if (key == 's') {
-		tcd_stop(&tc);
-	} else if (key == 'b') {
-		struct _callback _cb;
-
-		callback_set(&_cb, _tc_handler, NULL);
-		tcd_start(&tc, &_cb);
-	}
-#endif
-}
-
 /*----------------------------------------------------------------------------
  *        Global functions
  *----------------------------------------------------------------------------*/
@@ -279,11 +235,7 @@ int main(void)
 		led_status[i] = led_status[i-1];
 	}
 
-	console_example_info("Getting Started Example");
-
 	printf("Initializing console interrupts\r\n");
-	console_set_rx_handler(console_handler);
-	console_enable_rx_interrupt();
 
 #ifdef PINS_PUSHBUTTONS
 	printf("Configure buttons with debouncing.\n\r");
