@@ -98,7 +98,7 @@
  *        Headers
  *----------------------------------------------------------------------------*/
 
-#include "board.h"
+#include "board.h"			//todo: check what it initializes
 #include "chip.h"
 #include "trace.h"
 #include "compiler.h"
@@ -108,9 +108,6 @@
 #include "gpio/pio.h"
 #include "peripherals/pmc.h"
 #include "peripherals/tcd.h"
-
-#include "led/led.h"
-
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -139,8 +136,6 @@ struct _tcd_desc tc = {
 #endif
 
 //copied from board def
-#define PINS_PUSHBUTTONS { PIN_SW_1 }
-#define NUM_LEDS 1
 
 /*----------------------------------------------------------------------------
  *        Local variables
@@ -148,9 +143,40 @@ struct _tcd_desc tc = {
 
 
 /** Pushbutton \#1 pin instance. */
-static const struct _pin button_pins[] = PINS_PUSHBUTTONS;
+static const struct _pin sw_1 = PIN_SW_1;
+static const struct _pin atmel_red = PIN_ATMEL_RED;
 
-volatile bool led_status[NUM_LEDS];
+volatile bool led_status[1];
+
+
+// led functions, copied from led/led.c and adjusted to not take an index, but a pin
+static void led_pin_set(const struct _pin *led)
+{
+	/* Turn LED on */
+	if (led->type == PIO_OUTPUT_0)
+		pio_set(led);
+	else
+		pio_clear(led);
+}
+
+static void led_pin_clear (const struct _pin *led)
+{
+	/* Turn LED off */
+	if (led->type == PIO_OUTPUT_0)
+		pio_clear(led);
+	else
+		pio_set(led);
+}
+
+static void led_pin_toggle(const struct _pin *led)
+{
+	/* Toggle LED */
+	if (pio_get_output_data_status(led))
+		pio_clear(led);
+	else
+		pio_set(led);
+}
+
 
 /*----------------------------------------------------------------------------
  *        Local functions
@@ -165,7 +191,7 @@ static void process_button_evt(void)
 {
 	led_status[0] = !led_status[0];
 	if (!led_status[0]) {
-		led_clear(0);
+		led_pin_clear(&atmel_red);
 	}
 }
 
@@ -193,14 +219,14 @@ static void configure_buttons(void)
 	pio_set_debounce_filter(10);
 
 	/* Configure PIO */
-	pio_configure(&button_pins[0], 1);
+	pio_configure(&sw_1, 1);
 
 	/* Initialize interrupt with its handlers */
-	pio_add_handler_to_group(button_pins[0].group,
-					button_pins[0].mask, pio_handler, NULL);
+	pio_add_handler_to_group(sw_1.group,
+					sw_1.mask, pio_handler, NULL);
 
 	/* Enable interrupts */
-	pio_enable_it(button_pins);
+	pio_enable_it(&sw_1);
 }
 
 /*----------------------------------------------------------------------------
@@ -229,8 +255,7 @@ int main(void)
 
 		/* Toggle LED state if active */
 		if (led_status[0]) {
-			led_toggle(0);
-			printf("0 ");
+			led_pin_toggle(&atmel_red);
 		}
 
 		/* Wait for 250ms (4Hz) */
