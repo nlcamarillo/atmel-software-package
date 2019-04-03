@@ -237,18 +237,11 @@ static void configure_buttons(void)
  */
 int main(void)
 {
-	int i = 0;
-
 	led_status[0] = true;
-
-	printf("Initializing console interrupts\r\n");
 
 	printf("Configure buttons with debouncing.\n\r");
 	configure_buttons();
-	printf("Use push buttons or console key 0 to %d.\n\r", NUM_LEDS - 1);
-
-	printf("Press the number of the led to make it "
-	       "start or stop blinking.\n\r");
+	printf("Use push buttons\n\r");
 
 	printf("LED 0 uses softpack timer functions\r\n");
 
