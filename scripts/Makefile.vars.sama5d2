@@ -1,4 +1,4 @@
-SAMA5D2_TARGETS = sama5d2-generic sama5d2-xplained sama5d2-vb-bga196 sama5d2-vb-bga289 \
+SAMA5D2_TARGETS = sama5d2-generic sama5d2-xplained sama5d2-oko sama5d2-vb-bga196 sama5d2-vb-bga289 \
                   sama5d27-som1-ek sama5d2-ptc-ek
 
 ifneq ($(strip $(foreach board,$(SAMA5D2_TARGETS),$(if $(call eq,$(TARGET),$(board)),$(board)))),)
@@ -123,6 +123,38 @@ CONFIG_HAVE_AUDIO_AD1934 = y
 CONFIG_HAVE_SPI_AT25 = y
 CONFIG_HAVE_TWI_AT24 = y
 CONFIG_HAVE_IMAGE_SENSOR = y
+endif
+
+ifeq ($(TARGET),sama5d2-oko)
+CONFIG_CHIP_SAMA5D21 = y
+CONFIG_BOARD_SAMA5D2_OKO = y
+# CONFIG_HAVE_LED = y
+
+# from generic
+# allow choosing any supported serial driver at runtime
+CONFIG_SERIALD_UART = y
+CONFIG_SERIALD_USART = y
+# allow choosing any supported ddram type at runtime
+CONFIG_HAVE_DDR2_MT47H128M8 = y
+CONFIG_HAVE_DDR2_MT47H64M16 = y
+CONFIG_HAVE_DDR2_MT47H128M16 = y
+CONFIG_HAVE_DDR2_W971GG6SB = y
+CONFIG_HAVE_DDR2_W972GG6KB = y
+CONFIG_HAVE_LPDDR2_MT42L128M16 = y
+CONFIG_HAVE_DDR3_MT41K128M16 = y
+CONFIG_HAVE_LPDDR3_EDF8164A3MA = y
+
+# from xplained
+# CONFIG_SERIALD_UART = y
+# CONFIG_HAVE_DDR3_MT41K128M16 = y
+# CONFIG_HAVE_PMIC_ACT8945A = y
+# CONFIG_HAVE_AUDIO = y
+# CONFIG_HAVE_PDMIC = y
+# CONFIG_HAVE_CLASSD = y
+# CONFIG_HAVE_AUDIO_AD1934 = y
+# CONFIG_HAVE_SPI_AT25 = y
+# CONFIG_HAVE_TWI_AT24 = y
+# CONFIG_HAVE_IMAGE_SENSOR = y
 endif
 
 ifeq ($(TARGET),sama5d2-vb-bga196)

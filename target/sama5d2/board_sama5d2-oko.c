@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------------
  *         SAM Software Package License
  * ----------------------------------------------------------------------------
- * Copyright (c) 2015, Atmel Corporation
+ * Copyright (c) 2016, Atmel Corporation
  *
  * All rights reserved.
  *
@@ -27,25 +27,37 @@
  * ----------------------------------------------------------------------------
  */
 
-#ifndef _BOARD_HEADER_
-#define _BOARD_HEADER_
+/*----------------------------------------------------------------------------
+ *        Headers
+ *----------------------------------------------------------------------------*/
 
-#if defined(CONFIG_BOARD_SAMA5D2_GENERIC)
-  #include "board_sama5d2-generic.h"
-#elif defined(CONFIG_BOARD_SAMA5D2_XPLAINED)
-  #include "board_sama5d2-xplained.h"
-#elif defined(CONFIG_BOARD_SAMA5D2_OKO)
-  #include "board_sama5d2-oko.h"
-#elif defined(CONFIG_BOARD_SAMA5D2_VB_BGA196)
-  #include "board_sama5d2-vb-bga196.h"
-#elif defined(CONFIG_BOARD_SAMA5D2_VB_BGA289)
-  #include "board_sama5d2-vb-bga289.h"
-#elif defined(CONFIG_BOARD_SAMA5D27_SOM1_EK)
-  #include "board_sama5d27-som1-ek.h"
-#elif defined(CONFIG_BOARD_SAMA5D2_PTC_EK)
-  #include "board_sama5d2-ptc-ek.h"
+#include "chip.h"
+#include "board.h"
+#include "board_console.h"
+#include "compiler.h"
+
+#include "dma/dma.h"
+
+#include "board_support.h"
+
+/*----------------------------------------------------------------------------
+ *        Exported functions
+ *----------------------------------------------------------------------------*/
+
+WEAK void board_init(void)
+{
+#ifdef VARIANT_SRAM
+	bool clocks = true;
 #else
-  #error "No board defined"
+	bool clocks = false;
 #endif
 
-#endif /* _BOARD_HEADER_ */
+	/* Configure misc low-level stuff */
+	board_cfg_lowlevel(clocks, false, true);
+
+	/* Configure console */
+	board_cfg_console(0);
+
+	/* DMA Driver init */
+	dma_initialize(false);
+}

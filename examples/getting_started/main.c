@@ -113,7 +113,7 @@
 /** Delay for pushbutton debouncing (in milliseconds). */
 #define DEBOUNCE_TIME       500
 
-// #define ISOKO
+#define ISOKO
 
 #ifdef ISOKO
 	/**
@@ -121,7 +121,7 @@
 	 * not sure how to do that, but there is piobu.h which at least allows to
 	 * configure the pins
 	 */
-	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
+	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB12, PIO_INPUT, PIO_PULLUP }
 	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_0, PIO_OPENDRAIN }
 #else
 	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
@@ -241,16 +241,16 @@ int main(void)
 {
 	led_status[0] = true;
 
-	printf("Configure buttons with debouncing.\n\r");
-	configure_buttons();
+	// printf("Configure buttons with debouncing.\n\r");
+	// configure_buttons();
 	configure_leds();
-	printf("Use push buttons\n\r");
+	// printf("Use push buttons\n\r");
 
-	printf("LED 0 uses softpack timer functions\r\n");
+	// printf("LED 0 uses softpack timer functions\r\n");
 
 	while (1) {
 
-		/* Wait for LED to be active */
+		// /* Wait for LED to be active */
 		while (!led_status[0]);
 
 		/* Toggle LED state if active */

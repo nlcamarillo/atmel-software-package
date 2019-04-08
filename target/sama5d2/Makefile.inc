@@ -82,6 +82,7 @@ target-$(CONFIG_BOARD_SAMA5D2_GENERIC) += target/sama5d2/board_sama5d2-generic.o
 target-$(CONFIG_BOARD_SAMA5D2_VB_BGA196) += target/sama5d2/board_sama5d2-vb-bga196.o
 target-$(CONFIG_BOARD_SAMA5D2_VB_BGA289) += target/sama5d2/board_sama5d2-vb-bga289.o
 target-$(CONFIG_BOARD_SAMA5D2_XPLAINED) += target/sama5d2/board_sama5d2-xplained.o
+target-$(CONFIG_BOARD_SAMA5D2_OKO) += target/sama5d2/board_sama5d2-oko.o
 target-$(CONFIG_BOARD_SAMA5D27_SOM1_EK) += target/sama5d2/board_sama5d27-som1-ek.o
 target-$(CONFIG_BOARD_SAMA5D2_PTC_EK) += target/sama5d2/board_sama5d2-ptc-ek.o
 
