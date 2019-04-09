@@ -122,7 +122,7 @@
 	 * configure the pins
 	 */
 	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB12, PIO_INPUT, PIO_PULLUP }
-	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_0, PIO_OPENDRAIN }
+	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB1, PIO_OUTPUT_0, PIO_DEFAULT }
 #else
 	#define PIN_SW_1 { PIO_GROUP_B, PIO_PB9, PIO_INPUT, PIO_CFG_PB }
 	#define PIN_ATMEL_RED { PIO_GROUP_B, PIO_PB6, PIO_OUTPUT_1, PIO_OPENDRAIN }
@@ -232,6 +232,12 @@ static void configure_leds(void) {
  *        Global functions
  *----------------------------------------------------------------------------*/
 
+static void configure_jtag(void) {
+	static struct _pin gpios = {PIO_GROUP_D, 0x0007c000, PIO_PERIPH_A, PIO_DEFAULT};
+
+	pio_configure(&gpios, 1);
+}
+
 /**
  *  \brief getting-started Application entry point.
  *
@@ -240,6 +246,8 @@ static void configure_leds(void) {
 int main(void)
 {
 	led_status[0] = true;
+
+	configure_jtag();
 
 	// printf("Configure buttons with debouncing.\n\r");
 	// configure_buttons();
