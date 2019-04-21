@@ -113,7 +113,9 @@
 /** Delay for pushbutton debouncing (in milliseconds). */
 #define DEBOUNCE_TIME       500
 
-#define ISOKO
+#if defined(CONFIG_BOARD_SAMA5D2_OKO)
+	#define ISOKO
+#endif
 
 #ifdef ISOKO
 	/**
