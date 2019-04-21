@@ -32,6 +32,9 @@ TOP := ../..
 
 BINNAME = getting-started
 
+# build for oko unless specified otherwise on command line
+TARGET ?= sama5d2-oko
+
 CONFIG_LED = y
 
 obj-y += examples/getting_started/main.o
