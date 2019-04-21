@@ -74,4 +74,10 @@
 #define BOARD_TIMER_TC      TC1
 #define BOARD_TIMER_CHANNEL 0
 
+/* =================== QSPI serial flashdevice definition ======= */
+
+#define BOARD_QSPIFLASH_PINS     PINS_QSPI1_IOS2
+#define BOARD_QSPIFLASH_ADDR     QSPI1
+#define BOARD_QSPIFLASH_BAUDRATE 50000000 /* 50 MHz */
+
 #endif /* #ifndef _BOARD_D2_H */

@@ -82,6 +82,36 @@ define init_ddr
   continue
 end
 
+define set_bureg_qspi1
+  reset_registers
+
+  # set Boot Sequence Controller Configuration Register to 100 to boot from bureg 0 (section 16.5.2)
+  set *0xF8048054 = 0x66830004
+  
+  # set Backup Registers (BUREG), number 0 (see section 16.5.3 and 16.5.4)
+  # 0 : secure mode off (default)
+  # 0 : launch sam-ba if boot not found (default)
+  # 0 : read from BUREG and qspi in qspi mode (default) 2 for qspi in xip mode
+  # 4 : external memory enabled, use jtag ioset 0 (0100)
+  # F : UART off (1111) (5 for uart2 ioset 3)
+  # F : sdmmc off, nand flash off (1111) (8 for sdmmc 1)
+  # F : spi 0 and 1 0ff (1111)
+  # 7 : qspi1 ioset 2, qspi 0 off
+  # set *0xF8045400 = 0x0024FFF7
+  set *0xF8045400 = 0x00045FF7
+end
+
+define load_in_qspi1
+  
+  #reset_registers
+
+  load
+  
+  # Initialize PC to QSPI1 mem
+  # mon reg pc = 0xD8000000 # xip on
+  mon reg pc = 0x00200000   # xip off
+end
+
 define load_in_ddr
 
   reset_registers

@@ -57,6 +57,7 @@ endif
 # QSPI0 variant
 ifeq ($(VARIANT),qspi0)
 gnu-linker-script-y ?= $(TOP)/target/sama5d2/toolchain/gnu/qspi0.ld
+gnu-debug-script-y ?= $(TOP)/target/sama5d2/toolchain/gnu/qspi0.gdb
 iar-linker-script-y ?= $(TOP)/target/sama5d2/toolchain/iar/qspi0.icf
 iar-debug-script-y ?= $(TOP)/target/sama5d2/toolchain/iar/qspi.mac
 iar-flashloader-script-$(CONFIG_BOARD_SAMA5D2_XPLAINED) ?= $(TOP)/flash_loaders/sama5d2-generic/sama5d2-xplained.board
@@ -67,6 +68,7 @@ endif
 # QSPI1 variant
 ifeq ($(VARIANT),qspi1)
 gnu-linker-script-y ?= $(TOP)/target/sama5d2/toolchain/gnu/qspi1.ld
+gnu-debug-script-y ?= $(TOP)/target/sama5d2/toolchain/gnu/qspi1.gdb
 iar-linker-script-y ?= $(TOP)/target/sama5d2/toolchain/iar/qspi1.icf
 iar-debug-script-y ?= $(TOP)/target/sama5d2/toolchain/iar/qspi.mac
 iar-flashloader-script-$(CONFIG_BOARD_SAMA5D2_XPLAINED) ?= $(TOP)/flash_loaders/sama5d2-generic/sama5d2-xplained.board
